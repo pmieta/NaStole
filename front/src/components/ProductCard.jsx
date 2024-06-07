@@ -4,7 +4,7 @@ import { CartContext } from '../context/CartContext';
 
 const ProductCard = ({ product }) => {
 
-    const { addToCart } = useContext(CartContext);
+    const { cart, addToCart } = useContext(CartContext);
 
     const formatPrice = (price) => {
         return `${price.toFixed(2)} zł`;

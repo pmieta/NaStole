@@ -13,7 +13,7 @@ import { CartContext } from './context/CartContext';
 
 function Logout() {
   localStorage.clear();
-  return <Navigate to="/login" />;
+  return <Login />;
 }
 
 function RegisterAndLogout() {
@@ -38,7 +38,10 @@ function App() {
       try {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (token) {
-          const response = await api.get('/api/user/');
+          const response = await api.get('/api/user/', {
+            headers: { 'x-include-token': true }
+          }
+          );
           if (response.data.length > 0) {
             setUser(response.data[0]);
           } else {

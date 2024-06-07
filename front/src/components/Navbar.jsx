@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 import api from '../api';
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from 'react-icons/fa';
+import { CartContext } from '../context/CartContext';
 
 const CustomNavbar = ({ categories, user, cartCount }) => {
   const navigate = useNavigate();
+  const { cart } = useContext(CartContext);
 
   const handleButtonClick = () => {
     if (!user) {
@@ -47,7 +49,7 @@ const CustomNavbar = ({ categories, user, cartCount }) => {
               <ul className="dropdown-menu">
                 {categories.map(category => (
                   <li key={category.id}>
-                    <Link className="dropdown-item" to="/">{category.name}</Link>
+                    <Link className="dropdown-item" to="/category">{category.name}</Link>
                   </li>
                 ))}
               </ul>
