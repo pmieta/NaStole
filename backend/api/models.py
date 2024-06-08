@@ -31,34 +31,19 @@ class Product(models.Model):
     def __str__(self):
         return self.title
     
-class Address(models.Model):
-    address = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=10)
-    city = models.CharField(max_length=255)
-    floor = models.SmallIntegerField(default=0)
-
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.EmailField()
-    address = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=10)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-    
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    total_amount = models.FloatField()
+    total_amount = models.FloatField(default=0)
+    address = models.CharField(max_length=255, null=True)
+    postal_code = models.CharField(max_length=10, null=True)
+    city = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return f"Order {self.id} by {self.customer}"
-    
+
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     price = models.FloatField()
@@ -68,7 +53,7 @@ class OrderItem(models.Model):
     
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField()
     comment = models.TextField()
     review_date = models.DateTimeField(auto_now_add=True)

@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react';
+// App.jsx
+import React, { useContext, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import NotFound from './pages/NotFound';
-import CartPage from './pages/CartPage';
-import ItemsPage from './pages/ItemsPage';
-import ProtectedRoute from './components/ProtectedRoute';
 import CustomNavbar from './components/Navbar';
 import Footer from './components/Footer';
 import api from './api';
-import { ACCESS_TOKEN, REFRESH_TOKEN, IS_USER } from "./constants";
+import { ACCESS_TOKEN } from './constants';
 import { CartContext } from './context/CartContext';
+import CartPage from './pages/CartPage';
+import ItemsPage from './pages/ItemsPage';
+import ProductDetail from './pages/ProductDetail';
 
 function Logout() {
   localStorage.clear();
-  return <Login />;
+  return <Navigate to="/login" />;
 }
 
 function RegisterAndLogout() {
@@ -24,23 +25,21 @@ function RegisterAndLogout() {
 }
 
 function App() {
+  const { cart } = useContext(CartContext);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [user, setUser] = useState(null);
-  const { cart } = useContext(CartContext);
 
   useEffect(() => {
-    // Fetch categories from the API
     api.get('/api/categories/')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
 
-    // Fetch user data from the API or local storage
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (token) {
-          const response = await api.get('/api/user/', {
+          const response = await api.get('/auth/user/', {
             headers: { 'x-include-token': true }
           }
           );
@@ -71,8 +70,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterAndLogout />} />
-          <Route path="/cart" element={<CartPage />} /> 
-          <Route path="/items" element={<ItemsPage categories={categories} />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/products/:category?" element={<ItemsPage />} /> {/* Allow optional category */}
+          <Route path="/products" element={<ItemsPage />} /> {/* Route without category */}
+          <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

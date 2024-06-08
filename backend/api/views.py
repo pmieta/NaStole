@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, CategorySerializer, PublisherSerializer, ProductSerializer, CustomerSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
+from .serializers import UserSerializer, CategorySerializer, PublisherSerializer, ProductSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from .serializers import ContactFormSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Category, Publisher, Product, Customer, Order, OrderItem, Review, ContactForm
+from .models import Category, Publisher, Product, Order, OrderItem, Review, ContactForm
 from rest_framework import viewsets
 # Create your views here.
 
@@ -36,19 +36,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 
-class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
-    permission_classes = [AllowAny]
-
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
-
-class OrderItemViewSet(viewsets.ModelViewSet):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
     permission_classes = [AllowAny]
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -60,5 +50,3 @@ class ContactFormViewSet(viewsets.ModelViewSet):
     queryset = ContactForm.objects.all()
     serializer_class = ContactFormSerializer
     permission_classes = [AllowAny]
-
-

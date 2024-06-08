@@ -1,27 +1,35 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
-import api from '../api';
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { CartContext } from '../context/CartContext';
+import '../styles/Navbar.css';
 
-const CustomNavbar = ({ categories, user, cartCount }) => {
+const CustomNavbar = ({ categories, user }) => {
   const navigate = useNavigate();
-  const { cart } = useContext(CartContext);
+  const { cart } = React.useContext(CartContext);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleButtonClick = () => {
-    if (!user) {
-      // Redirect to login page or show login modal
-      navigate('/login');
-    } else {
-      // Redirect to user page
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // Prevents the default form submission
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
   const handleCartClick = () => {
-    // Redirect to cart page
     navigate('/cart');
+  };
+
+  const handleButtonClick = () => {
+    if (!user) {
+      navigate('/login');
+    } else {
+      navigate('/user');
+    }
   };
 
   return (
@@ -29,7 +37,7 @@ const CustomNavbar = ({ categories, user, cartCount }) => {
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <img src="../logo.jpg" alt="Logo" width="50" height="40" className="d-inline-block align-text-top"></img>
-            Na Stole
+          Na Stole
         </Link>
         <button className="navbar-toggler" type="button"
           data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -40,7 +48,7 @@ const CustomNavbar = ({ categories, user, cartCount }) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/items">Wszystkie przedmioty</Link>
+              <Link className="nav-link active" aria-current="page" to="/">Strona główna</Link>
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,14 +57,21 @@ const CustomNavbar = ({ categories, user, cartCount }) => {
               <ul className="dropdown-menu">
                 {categories.map(category => (
                   <li key={category.id}>
-                    <Link className="dropdown-item" to="/category">{category.name}</Link>
+                    <Link className="dropdown-item" to={`/products/${category.name}`}>{category.name}</Link>
                   </li>
                 ))}
               </ul>
             </li>
           </ul>
-          <form className="d-flex">
-            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+          <form className="d-flex" onSubmit={handleSearchSubmit}>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
             <button className="btn btn-outline-success" type="submit">Search</button>
           </form>
           <button className="btn btn-outline-primary ms-2" onClick={handleButtonClick}>
@@ -64,7 +79,7 @@ const CustomNavbar = ({ categories, user, cartCount }) => {
           </button>
           <button className="btn btn-outline-secondary ms-2 position-relative" onClick={handleCartClick}>
             <FaShoppingCart />
-            {cartCount > 0 && (
+            {cart.length > 0 && (
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {cart.length}
                 <span className="visually-hidden">items in cart</span>
@@ -75,6 +90,6 @@ const CustomNavbar = ({ categories, user, cartCount }) => {
       </div>
     </nav>
   );
-}
+};
 
 export default CustomNavbar;
