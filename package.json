@@ -3,6 +3,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "jwt-decode": "^4.0.0",
-    "react-bootstrap": "^2.10.2"
+    "react-bootstrap": "^2.10.2",
+    "react-input-mask": "^2.0.4"
   }
 }

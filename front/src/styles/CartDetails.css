@@ -1,0 +1,19 @@
+.cart-details {
+    margin-bottom: 20px;
+  }
+  
+  .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  
+  .table img {
+    max-width: 50px;
+  }
+  

@@ -1,8 +1,8 @@
 // HomePage.jsx
 import React, { useState, useEffect } from 'react';
-import api from '../api';  
+import api from '../api';
 import '../styles/Home.css'
-import '../styles/HomePage.css'; 
+import '../styles/HomePage.css';
 import Navbar from '../components/Navbar';
 import LoadingIndicator from '../components/LoadingIndicator';
 import Carousel from '../components/Carousel';
@@ -74,14 +74,17 @@ const HomePage = () => {
 
     return (
         <div className="container">
-            
+
             <Carousel />
-            <div className="row text-center">
-                {products.map(product => (
-                    <ProductCard product = { product }></ProductCard>
-                ))}
+            <div className="col-12">
+            <div className="row justify-content-start">
+                
+                    {products.map(product => (
+                        <ProductCard product={product}></ProductCard>
+                    ))}
+                </div>
             </div>
-            
+
         </div>
     );
 };

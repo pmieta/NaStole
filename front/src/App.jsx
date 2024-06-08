@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import NotFound from './pages/NotFound';
+import CartPage from './pages/CartPage';
+import ItemsPage from './pages/ItemsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import CustomNavbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -69,6 +71,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterAndLogout />} />
+          <Route path="/cart" element={<CartPage />} /> 
+          <Route path="/items" element={<ItemsPage categories={categories} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
