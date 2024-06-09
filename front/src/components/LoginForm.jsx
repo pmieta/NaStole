@@ -31,7 +31,7 @@ const LoginForm = ({ toggleForm }) => {
     };
 
     return (
-        <div className="conatiner">
+        <div className="conatainer">
             
             <form onSubmit={handleSubmit} className="form-container">
             {error && <p className="error-message">{error}</p>}
@@ -42,7 +42,7 @@ const LoginForm = ({ toggleForm }) => {
                     type="text"
                     value={formData.username}
                     onChange={handleChange}
-                    placeholder="Username"
+                    placeholder="Login"
                     requred
                 />
                 <input
@@ -50,7 +50,7 @@ const LoginForm = ({ toggleForm }) => {
                     type="password"
                     value={formData.password} 
                     onChange={handleChange} 
-                    placeholder="Password"
+                    placeholder="Hasło"
                     name='password'
                     required
                 />

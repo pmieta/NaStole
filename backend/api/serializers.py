@@ -80,9 +80,15 @@ class OrderSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = '__all__'
+        fields = ['id', 'product', 'user', 'rating', 'comment', 'review_date']
+        read_only_fields = ['user', 'review_date']
+
+    def create(self, validated_data):
+        review = Review.objects.create(**validated_data)
+        return review
 
 class ContactFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactForm
         fields = '__all__'
+

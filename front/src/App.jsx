@@ -9,6 +9,8 @@ import OrderSuccess from './pages/OrderSuccess';
 import UserPage from './pages/UserPage';
 import ProductDetail from './pages/ProductDetail';
 import LoginPage from './pages/LoginPage';
+import ReviewSuccess from './pages/ReviewSuccess';
+import OpinionPage from './pages/OpinionPage';
 import CustomNavbar from './components/Navbar';
 import Footer from './components/Footer';
 import api from './api';
@@ -62,6 +64,7 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/orders/:orderId" element={<OrderDetail />} />
           <Route path="/user" element={<UserPage />} />
+          <Route path="/products/:id/review" element={<OpinionPage />} />          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

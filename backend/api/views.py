@@ -7,7 +7,7 @@ from .serializers import UserSerializer, CategorySerializer, PublisherSerializer
 from .serializers import ContactFormSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Category, Publisher, Product, Order, OrderItem, Review, ContactForm
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 
 # Create your views here.
@@ -65,7 +65,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [AllowAny]
+    permission_classes=[IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class ContactFormViewSet(viewsets.ModelViewSet):
     queryset = ContactForm.objects.all()

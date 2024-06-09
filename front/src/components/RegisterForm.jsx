@@ -1,4 +1,3 @@
-// RegisterForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
@@ -23,8 +22,8 @@ const RegisterForm = ({ toggleForm }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/api/user/register/', formData);
-            navigate('/login'); 
+            await api.post('/api/user/register/', formData);           
+            window.location.replace('/login'); 
         } catch (error) {
             setError('Nie udało się zarejestrować');
         }
@@ -32,7 +31,7 @@ const RegisterForm = ({ toggleForm }) => {
 
     return (
         <div className="form-container">
-            <h2>Register</h2>
+            <h2>Zarejestruj się</h2>
             {error && <p className="error-message">{error}</p>}
             <form onSubmit={handleSubmit}>
                 <input

@@ -11,11 +11,12 @@ const UserPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(user)
     const fetchOrders = async () => {
       try {
         const response = await api.get('/api/orders/my_orders/', {
           headers: {
-            'x-include-token': true // Include token for this request
+            'x-include-token': true 
           }
         });
         setOrders(response.data);
@@ -34,26 +35,26 @@ const UserPage = () => {
 
   return (
     <div className="container mt-4 user-page">
-      <h2>User Account</h2>
+      <h2>Moje konto</h2>
       {user ? (
         <div className="user-details mb-4">
-          <h4>Profile</h4>
-          <p><strong>Name:</strong> {user.first_name} {user.last_name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
+          <h4>Dane użytkownika</h4>
+          <p><strong>Imię i nazwisko:</strong> {user[0].first_name} {user[0].last_name}</p>
+          <p><strong>Email:</strong> {user[0].email}</p>
           {/* Add more user details as needed */}
         </div>
       ) : (
-        <p>No user data available.</p>
+        <p>Brak danych.</p>
       )}
-      <h4>Order History</h4>
+      <h4>Historia zamówień</h4>
       {orders.length > 0 ? (
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Order ID</th>
-              <th>Date</th>
-              <th>Total Amount</th>
-              <th>Details</th>
+              <th>ID zamówienia</th>
+              <th>Data</th>
+              <th>Kwota</th>
+              <th>Szczegóły</th>
             </tr>
           </thead>
           <tbody>
@@ -67,7 +68,7 @@ const UserPage = () => {
                     className="btn btn-primary btn-sm"
                     onClick={() => navigate(`/orders/${order.id}`)}
                   >
-                    View
+                    Zobacz szczegóły
                   </button>
                 </td>
               </tr>

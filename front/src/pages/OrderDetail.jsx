@@ -50,20 +50,21 @@ const OrderDetail = () => {
     <div className="container mt-4 order-detail-page">
       {order ? (
         <div>
-          <h2>Order #{order.id}</h2>
-          <p><strong>Date:</strong> {new Date(order.order_date).toLocaleDateString()}</p>
-          <p><strong>Total Amount:</strong> {order.total_amount.toFixed(2)} zł</p>
-          <p><strong>Address:</strong> {order.address}</p>
-          <p><strong>Postal Code:</strong> {order.postal_code}</p>
-          <p><strong>City:</strong> {order.city}</p>
-          <h4>Items</h4>
+          <h2>Zamówienie nr {order.id}</h2>
+          <p><strong>Data:</strong> {new Date(order.order_date).toLocaleDateString()}</p>
+          <p><strong>Łączna kwota:</strong> {order.total_amount.toFixed(2)} zł</p>
+          <p><strong>Adres:</strong> {order.address}</p>
+          <p><strong>Kod pocztowy:</strong> {order.postal_code}</p>
+          <p><strong>Miejscowość:</strong> {order.city}</p>
+          <h4>Przedmioty</h4>
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
+                <th>Produkt</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+                <th>Łącznie</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -73,6 +74,8 @@ const OrderDetail = () => {
                   <td>{item.quantity}</td>
                   <td>{item.price.toFixed(2)} zł</td>
                   <td>{(item.quantity * item.price).toFixed(2)} zł</td>
+                  <td><Link to={`/products/${item.product}/review`}>Dodaj opinie</Link></td>
+                  
                 </tr>
               ))}
             </tbody>

@@ -41,6 +41,7 @@ api.interceptors.request.use(
       }
 
       if (token) {
+        console.log("dodaje token")
         config.headers.Authorization = `Bearer ${token}`;
       }
 
