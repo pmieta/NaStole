@@ -1,11 +1,15 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.contrib.auth.models import User
-from rest_framework import generics
+from rest_framework import generics, status
 from .serializers import UserSerializer, CategorySerializer, PublisherSerializer, ProductSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from .serializers import ContactFormSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Category, Publisher, Product, Order, OrderItem, Review, ContactForm
 from rest_framework import viewsets
+from rest_framework.decorators import action
+
 # Create your views here.
 
 class CreateUserView(generics.CreateAPIView):
@@ -36,10 +40,27 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    def newest(self, request):
+        amount = int(request.query_params.get('amount', 4))
+        if amount <= 0:
+            return Response({"error": "Amount must be greater than zero"}, status=400)
+        
+        products = Product.objects.all().order_by('-release_date')[:amount]
+        serializer = self.get_serializer(products, many=True, context={'request': request})
+        return Response(serializer.data)
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def my_orders(self, request):
+        # Filter orders by the logged-in user
+        orders = Order.objects.filter(customer=request.user)
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data)
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()

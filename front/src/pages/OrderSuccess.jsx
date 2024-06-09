@@ -7,7 +7,7 @@ const OrderSuccess = () => {
     <div className="container mt-5 text-center">
       <h2>Dziękujemy za złożenie zamówienia!</h2>
       <p>Twoje zamówienie zostało złożone. Możesz zobaczyć je w zakładce <Link to='/user'> moje konto</Link> </p>
-      <Link to="/items" className="btn btn-primary mt-3">
+      <Link to="/products" className="btn btn-primary mt-3">
         Kontynuuj zakupy
       </Link>
     </div>

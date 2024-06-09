@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { CartContext } from '../context/CartContext';
+import { UserContext } from '../context/UserContext';
 import '../styles/Navbar.css';
 
-const CustomNavbar = ({ categories, user }) => {
+const CustomNavbar = ({ categories }) => {
   const navigate = useNavigate();
-  const { cart } = React.useContext(CartContext);
+  const { cart } = useContext(CartContext);
+  const { user, handleLogout } = useContext(UserContext);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (e) => {
@@ -48,7 +50,7 @@ const CustomNavbar = ({ categories, user }) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/">Strona główna</Link>
+              <Link className="nav-link active" aria-current="page" to="/products">Wszystkie przedmioty</Link>
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,6 +79,11 @@ const CustomNavbar = ({ categories, user }) => {
           <button className="btn btn-outline-primary ms-2" onClick={handleButtonClick}>
             {user ? 'Konto' : 'Login'}
           </button>
+          {user && (
+            <button className="btn btn-outline-danger ms-2" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
           <button className="btn btn-outline-secondary ms-2 position-relative" onClick={handleCartClick}>
             <FaShoppingCart />
             {cart.length > 0 && (

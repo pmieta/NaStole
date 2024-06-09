@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
 import { isTokenExpired } from './authUtils';
+import { addGlobalAlert } from './alertManager';
 
-const apiUrl = "http://127.0.0.1:8000"; // Base URL for the API
+const apiUrl = "http://127.0.0.1:8000";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || apiUrl, // Use environment variable or default
+  baseURL: import.meta.env.VITE_API_URL || apiUrl,
 });
 
 // Function to handle token refresh
@@ -22,10 +23,8 @@ const refreshToken = async () => {
   }
 };
 
-// Request interceptor to handle token inclusion and refresh
 api.interceptors.request.use(
   async (config) => {
-    // Check if token should be included in the request
     if (config.headers['x-include-token']) {
       let token = localStorage.getItem(ACCESS_TOKEN);
 
@@ -35,9 +34,8 @@ api.interceptors.request.use(
           localStorage.setItem(ACCESS_TOKEN, token);
         } else {
           console.error("Token refresh failed. Redirecting to login.");
-          // localStorage.clear();
-          localStorage.removeItem(ACCESS_TOKEN)
-          localStorage.removeItem(REFRESH_TOKEN)
+          localStorage.clear();
+          addGlobalAlert('warning', 'Session expired. Please log in again.'); 
           window.location.href = '/login';
         }
       }
@@ -46,7 +44,6 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
 
-      // Remove the custom header to avoid issues with the API
       delete config.headers['x-include-token'];
     }
     return config;

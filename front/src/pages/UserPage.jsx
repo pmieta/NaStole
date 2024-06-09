@@ -1,32 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import { UserContext } from '../context/UserContext';
 
 const UserPage = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useContext(UserContext);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await api.get('/auth/user/', {
-          headers: {
-            'x-include-token': true 
-          }
-        });
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Could not fetch user data.');
-      }
-    };
-
     const fetchOrders = async () => {
       try {
-        const response = await api.get('/api/orders/', {
+        const response = await api.get('/api/orders/my_orders/', {
           headers: {
             'x-include-token': true // Include token for this request
           }
@@ -39,7 +26,6 @@ const UserPage = () => {
       setLoading(false);
     };
 
-    fetchUserData();
     fetchOrders();
   }, []);
 

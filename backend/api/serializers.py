@@ -30,11 +30,17 @@ class ProductSerializer(serializers.ModelSerializer):
     category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), source='category', write_only=True)
     publisher = serializers.CharField(source='publisher.name')
     publisher_id = serializers.PrimaryKeyRelatedField(queryset=Publisher.objects.all(), source='publisher', write_only=True)
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = ['id', 'title', 'description', 'price', 'stock_quantity', 'category_id', 'category', 'publisher_id', 'publisher', 'release_date', 'min_players', 'max_players', 'image']
 
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        return None
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,12 +1,14 @@
 // App.jsx
 import React, { useContext, useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import NotFound from './pages/NotFound';
 import OrderSuccess from './pages/OrderSuccess';
 import UserPage from './pages/UserPage';
+import ProductDetail from './pages/ProductDetail';
+import LoginPage from './pages/LoginPage';
 import CustomNavbar from './components/Navbar';
 import Footer from './components/Footer';
 import api from './api';
@@ -14,7 +16,8 @@ import { ACCESS_TOKEN } from './constants';
 import { CartContext } from './context/CartContext';
 import CartPage from './pages/CartPage';
 import ItemsPage from './pages/ItemsPage';
-import ProductDetail from './pages/ProductDetail';
+import OrderDetail from './pages/OrderDetail';
+import Form from './components/Form';
 
 function Logout() {
   localStorage.clear();
@@ -23,7 +26,7 @@ function Logout() {
 
 function RegisterAndLogout() {
   localStorage.clear();
-  return <Register />;
+  return <Navigate to="/login" />;
 }
 
 function App() {
@@ -41,7 +44,7 @@ function App() {
       try {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (token) {
-          const response = await api.get('/auth/user/', {
+          const response = await api.get('/api/user/', {
             headers: { 'x-include-token': true }
           }
           );
@@ -70,14 +73,15 @@ function App() {
       <div className="container mt-4">
         <Routes>
           <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterAndLogout />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:category?" element={<ItemsPage />} /> {/* Allow optional category */}
           <Route path="/products" element={<ItemsPage />} /> {/* Route without category */}
-          <Route path="/products/:productId" element={<ProductDetail />} />
+          <Route path="/product/:productId" element={<ProductDetail />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/orders/:orderId" element={<OrderDetail />} />
           <Route path="/user" element={<UserPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

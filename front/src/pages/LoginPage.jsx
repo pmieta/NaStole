@@ -1,20 +1,19 @@
 import { useState } from "react";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css"
-import LoadingIndicator from "./LoadingIndicator";
+import LoadingIndicator from "../components/LoadingIndicator";
 
-function Form() {
+function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [route, setRoute] = useState("/api/token/")
     const [method, setMethod] = useState("login")
+    const [name, setName] = useState("Zaloguj się")
 
     const navigate = useNavigate();
-
-    const name = method === "login" ? "Login" : "Register";
 
     const handleSubmit = async (e) => {
         setLoading(true);
@@ -27,7 +26,7 @@ function Form() {
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 window.location.href = '/';
             } else {
-                navigate("/login")
+                window.location.replace("/login");
             }
         } catch (error) {
             alert(error)
@@ -35,6 +34,18 @@ function Form() {
             setLoading(false)
         }
     };
+
+    const handleSwitchMethod = () => {
+        if (method === "login") {
+            setMethod("register")
+            setRoute("/api/user/register/")
+            setName("Zarejestruj się")
+        } else {
+            setMethod("login")
+            setRoute("/api/token/")
+            setName("Zaloguj się")
+        }
+    }
 
     return (
         <div className="container">
@@ -58,10 +69,11 @@ function Form() {
                 <button className="form-button" type="submit">
                     {name}
                 </button>
+                {method === "login" ? <p>Nie masz konta? <Link onClick={handleSwitchMethod}>Zarejestruj się</Link></p> :
+                    <p>Masz już konto? <Link onClick={handleSwitchMethod}>Zaloguj się</Link></p>}
             </form>
-            Already
         </div>
     );
 }
 
-export default Form
+export default LoginPage

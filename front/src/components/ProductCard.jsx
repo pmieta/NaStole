@@ -16,7 +16,7 @@ const ProductCard = ({ product }) => {
     return (
         <div key={product.id} className="col-lg-3 col-md-4 mb-4">
             <div className="card h-100">
-                <Link to={`/products/${product.id}`}>
+                <Link to={`/product/${product.id}`}>
                     <img className="card-img-top" src={product.image} onError={
                         (e) => (e.target.src = "../../logo.jpg")} />
                 </Link>
