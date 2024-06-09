@@ -16,7 +16,7 @@ const CustomNavbar = ({ categories }) => {
   };
 
   const handleSearchSubmit = (e) => {
-    e.preventDefault(); // Prevents the default form submission
+    e.preventDefault(); 
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
     }

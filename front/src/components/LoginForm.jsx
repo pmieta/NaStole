@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import "../styles/Form.css"
+import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+
 
 const LoginForm = ({ toggleForm }) => {
     const [formData, setFormData] = useState({
@@ -8,6 +12,7 @@ const LoginForm = ({ toggleForm }) => {
         password: ''
     });
     const [error, setError] = useState(null);
+    const { handleLogin } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -18,32 +23,42 @@ const LoginForm = ({ toggleForm }) => {
         e.preventDefault();
         try {
             const response = await api.post('/api/token/', formData);
-            localStorage.setItem('ACCESS_TOKEN', response.data.access);
-            localStorage.setItem('REFRESH_TOKEN', response.data.refresh);
-            navigate('/'); // Redirect to homepage or dashboard
+            handleLogin(response.data.access, response.data.refresh);
+            navigate('/'); 
         } catch (error) {
-            setError('Login failed. Please check your credentials.');
+            setError('Nie udało się zalogować');
         }
     };
 
     return (
-        <div className="form-container">
-            <h2>Login</h2>
+        <div className="conatiner">
+            
+            <form onSubmit={handleSubmit} className="form-container">
             {error && <p className="error-message">{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" value={formData.username} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-                </div>
-                <button type="submit" className="btn btn-primary">Login</button>
+                <h1>Zaloguj się</h1>
+                <input
+                    className="form-input"
+                    name='username'
+                    type="text"
+                    value={formData.username}
+                    onChange={handleChange}
+                    placeholder="Username"
+                    requred
+                />
+                <input
+                    className="form-input"
+                    type="password"
+                    value={formData.password} 
+                    onChange={handleChange} 
+                    placeholder="Password"
+                    name='password'
+                    required
+                />
+                <button className="form-button" type="submit">
+                    Zaloguj się
+                </button>
+                Nie masz konta? <Link onClick={toggleForm} className="link-button">Zarejestruj się</Link>
             </form>
-            <p className="toggle-text">
-                Don't have an account? <button onClick={toggleForm} className="link-button">Register</button>
-            </p>
         </div>
     );
 };

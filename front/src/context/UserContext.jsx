@@ -37,6 +37,7 @@ export const UserProvider = ({ children }) => {
   const handleLogin = (token, refreshToken) => {
     localStorage.setItem(ACCESS_TOKEN, token);
     localStorage.setItem(REFRESH_TOKEN, refreshToken);
+    console.log("handling login")
     loadUser();
   };
 

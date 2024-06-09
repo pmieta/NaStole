@@ -18,6 +18,7 @@ import CartPage from './pages/CartPage';
 import ItemsPage from './pages/ItemsPage';
 import OrderDetail from './pages/OrderDetail';
 import Form from './components/Form';
+import { UserContext, } from './context/UserContext';
 
 function Logout() {
   localStorage.clear();
@@ -33,34 +34,12 @@ function App() {
   const { cart } = useContext(CartContext);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     api.get('/api/categories/')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Error fetching categories:', error));
 
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        if (token) {
-          const response = await api.get('/api/user/', {
-            headers: { 'x-include-token': true }
-          }
-          );
-          if (response.data.length > 0) {
-            setUser(response.data[0]);
-          } else {
-            console.log('User data is empty');
-            setUser(null)
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
   }, []);
 
   const handleSearch = (query) => {
@@ -69,7 +48,7 @@ function App() {
 
   return (
     <div>
-      <CustomNavbar categories={categories} onSearch={handleSearch} user={user} cartCount={cart.length} />
+      <CustomNavbar categories={categories} onSearch={handleSearch} cartCount={cart.length} />
       <div className="container mt-4">
         <Routes>
           <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
