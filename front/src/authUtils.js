@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode'; // Import as a named import
+import { jwtDecode } from 'jwt-decode'; 
 
 export const isTokenExpired = (token) => {
   if (!token) return true;

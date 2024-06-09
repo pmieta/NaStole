@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import NotFound from './pages/NotFound';
+import OrderSuccess from './pages/OrderSuccess';
+import UserPage from './pages/UserPage';
 import CustomNavbar from './components/Navbar';
 import Footer from './components/Footer';
 import api from './api';
@@ -47,6 +49,7 @@ function App() {
             setUser(response.data[0]);
           } else {
             console.log('User data is empty');
+            setUser(null)
           }
         }
       } catch (error) {
@@ -74,6 +77,8 @@ function App() {
           <Route path="/products/:category?" element={<ItemsPage />} /> {/* Allow optional category */}
           <Route path="/products" element={<ItemsPage />} /> {/* Route without category */}
           <Route path="/products/:productId" element={<ProductDetail />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/user" element={<UserPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

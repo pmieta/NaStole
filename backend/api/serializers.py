@@ -47,11 +47,16 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'customer', 'order_date', 'total_amount', 'address', 'postal_code', 'city',  'items']
-        read_only_fields = ['order_date', 'total_amount']
+        read_only_fields = ['order_date', 'total_amount', 'customer']
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
-        order = Order.objects.create(**validated_data)
+        request = self.context.get('request')
+        if not request or not hasattr(request, 'user'):
+            raise serializers.ValidationError('User must be authenticated to create an order.')
+
+        customer = request.user
+        order = Order.objects.create(customer=customer, **validated_data)
         total_amount = 0
 
         for item_data in items_data:

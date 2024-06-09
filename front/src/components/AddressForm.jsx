@@ -1,116 +1,82 @@
 import React, { useState, useContext } from 'react';
 import { CartContext } from '../context/CartContext';
-import '../styles/AddressForm.css';
 import api from '../api';
-import InputMask from 'react-input-mask';
+import { useNavigate } from 'react-router-dom';
 
 const AddressForm = () => {
+  const [address, setAddress] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [city, setCity] = useState('');
   const { cart, clearCart } = useContext(CartContext);
-  const [address, setAddress] = useState({
-    firstName: '',
-    lastName: '',
-    street: '',
-    city: '',
-    postalCode: '',
-    country: ''
-  });
-  const [isOrderCreating, setIsOrderCreating] = useState(false);
+  const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [name]: value
-    }));
-  };
-
-  const handleCreateOrder = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsOrderCreating(true);
+
+    const orderData = {
+      address,
+      postal_code: postalCode,
+      city,
+      items: cart.map(item => ({
+        product: item.id,
+        quantity: item.quantity,
+        price: item.price
+      }))
+    };
+
     try {
-      const orderData = {
-        items: cart,
-        total: cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2),
-        address
-      };
-      const response = await api.post('/api/orders/', orderData);
-      console.log('Order created successfully:', response.data);
+      const response = await api.post('/api/orders/', orderData, {
+        headers: {
+          'x-include-token': true // Include token for this request
+        }
+      });
+      console.log('Order created:', response.data);
       clearCart();
-      alert('Order created successfully!');
+      navigate('/order-success');
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Failed to create order. Please try again.');
-    } finally {
-      setIsOrderCreating(false);
     }
   };
 
   return (
-    <div className="address-form">
-      <h2>Adres dostawy</h2>
-      <form onSubmit={handleCreateOrder}>
-        <div className="mb-3">
-          <label className="form-label">Imie</label>
-          <input
-            type="text"
-            className="form-control"
-            name="firstName"
-            value={address.firstName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Nazwisko</label>
-          <input
-            type="text"
-            className="form-control"
-            name="lastName"
-            value={address.lastName}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Adres</label>
-          <input
-            type="text"
-            className="form-control"
-            name="street"
-            value={address.street}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Miejscowość</label>
-          <input
-            type="text"
-            className="form-control"
-            name="city"
-            value={address.city}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Kod pocztowy</label>
-          <InputMask
-            mask="99-999"
-            maskChar=" "
-            type="text"
-            className="form-control"
-            name="postalCode"
-            value={address.postalCode}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-success" disabled={isOrderCreating}>
-          {isOrderCreating ? 'Tworzenie zamówienia...' : 'Złóż zamówienie'}
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <label htmlFor="address" className="form-label">Address</label>
+        <input
+          type="text"
+          className="form-control"
+          id="address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="postalCode" className="form-label">Postal Code</label>
+        <input
+          type="text"
+          className="form-control"
+          id="postalCode"
+          value={postalCode}
+          onChange={(e) => setPostalCode(e.target.value)}
+          pattern="\d{2}-\d{3}"
+          title="Format should be xx-xxx"
+          required
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="city" className="form-label">City</label>
+        <input
+          type="text"
+          className="form-control"
+          id="city"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className="btn btn-primary">Submit Order</button>
+    </form>
   );
 };
 
