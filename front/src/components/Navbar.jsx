@@ -69,19 +69,19 @@ const CustomNavbar = ({ categories }) => {
             <input
               className="form-control me-2"
               type="search"
-              placeholder="Search"
+              placeholder="Wpisz nazwę produktu"
               aria-label="Search"
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            <button className="btn btn-outline-success" type="submit">Search</button>
+            <button className="btn btn-outline-success" type="submit">Szukaj</button>
           </form>
           <button className="btn btn-outline-primary ms-2" onClick={handleButtonClick}>
-            {user ? 'Konto' : 'Login'}
+            {user ? 'Konto' : 'Zaloguj się'}
           </button>
           {user && (
             <button className="btn btn-outline-danger ms-2" onClick={handleLogout}>
-              Logout
+              Wyloguj
             </button>
           )}
           <button className="btn btn-outline-secondary ms-2 position-relative" onClick={handleCartClick}>
