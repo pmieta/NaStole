@@ -21,6 +21,8 @@ import ItemsPage from './pages/ItemsPage';
 import OrderDetail from './pages/OrderDetail';
 import Form from './components/Form';
 import { UserContext, } from './context/UserContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Logout() {
   localStorage.clear();
@@ -53,6 +55,7 @@ function App() {
       <CustomNavbar categories={categories} onSearch={handleSearch} cartCount={cart.length} />
       <div className="container mt-4">
         <Routes>
+          
           <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<Logout />} />
@@ -68,6 +71,8 @@ function App() {
           <Route path="/review-success" element={<ReviewSuccess />} />       
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer />
+        
       </div>
       <Footer />
     </div>

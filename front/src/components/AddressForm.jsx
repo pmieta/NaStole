@@ -3,6 +3,7 @@ import { CartContext } from '../context/CartContext';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 
+
 const AddressForm = () => {
   const [address, setAddress] = useState('');
   const [postalCode, setPostalCode] = useState('');
@@ -34,49 +35,53 @@ const AddressForm = () => {
       clearCart();
       navigate('/order-success');
     } catch (error) {
-      console.error('Error creating order:', error);
+      console.log(error)
+      toast.error(error.response.data[0]);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label htmlFor="address" className="form-label">Adres</label>
-        <input
-          type="text"
-          className="form-control"
-          id="address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="postalCode" className="form-label">Kod pocztowy</label>
-        <input
-          type="text"
-          className="form-control"
-          id="postalCode"
-          value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
-          pattern="\d{2}-\d{3}"
-          title="Format should be xx-xxx"
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="city" className="form-label">Miejscowość</label>
-        <input
-          type="text"
-          className="form-control"
-          id="city"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit" className="btn btn-primary">Złóż zamówienie</button>
-    </form>
+    <>
+    
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="address" className="form-label">Adres</label>
+          <input
+            type="text"
+            className="form-control"
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="postalCode" className="form-label">Kod pocztowy</label>
+          <input
+            type="text"
+            className="form-control"
+            id="postalCode"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            pattern="\d{2}-\d{3}"
+            title="Format should be xx-xxx"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="city" className="form-label">Miejscowość</label>
+          <input
+            type="text"
+            className="form-control"
+            id="city"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Złóż zamówienie</button>
+      </form>
+    </>
   );
 };
 

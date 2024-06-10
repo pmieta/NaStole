@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../api';
 import '../styles/Footer.css';
+import {  toast } from 'react-toastify';
 
 const Footer = () => {
     const [formData, setFormData] = useState({
@@ -9,7 +10,6 @@ const Footer = () => {
         email: '',
         content: '',
     });
-    const [submitted, setSubmitted] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,11 +19,22 @@ const Footer = () => {
         });
     };
 
+    const validateEmail = (email) => {
+        // Simple regex for email validation
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!validateEmail(email)) {
+            toast.warning('Nieprawidłowy format adresu e-mail');
+            return;
+        }
         api.post('/api/contact_forms/', formData)
             .then(response => {
-                setSubmitted(true);
+                toast.success("Twoja wiadomość została wysłana!")
                 setFormData({
                     first_name: '',
                     last_name: '',
@@ -33,6 +44,7 @@ const Footer = () => {
             })
             .catch(error => {
                 console.error('There was an error submitting the form!', error);
+                toast.error("Błąd potrzas zatwierdzania formularza")
             });
     };
 
@@ -64,7 +76,6 @@ const Footer = () => {
                     </div>
                     <div className="col-md-6">
                         <h5>Skontaktuj się z nami</h5>
-                        {submitted && <div className="alert alert-success mt-3">Dziękujemy za kontakt!</div>}
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="first_name">Imię</label>

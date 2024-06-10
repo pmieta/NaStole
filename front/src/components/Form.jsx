@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css"
 import LoadingIndicator from "./LoadingIndicator";
+import {  toast } from 'react-toastify';
 
 function Form() {
     const [username, setUsername] = useState("");
@@ -23,6 +24,7 @@ function Form() {
         try {
             const res = await api.post(route, { username, password })
             if (method === "login") {
+                toast.success('Zalogowano pomyślnie')
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 window.location.href = '/';

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import "../styles/Form.css"
 import { Link } from 'react-router-dom';
+import {  toast } from 'react-toastify';
 
 const RegisterForm = ({ toggleForm }) => {
     const [formData, setFormData] = useState({
@@ -19,13 +20,26 @@ const RegisterForm = ({ toggleForm }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const validateEmail = (email) => {
+        // Simple regex for email validation
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateEmail(formData.email)) {
+            toast.warning('Nieprawidłowy format adresu e-mail');
+            return;
+        }
         try {
-            await api.post('/api/user/register/', formData);           
+            await api.post('/api/user/register/', formData);  
+            toast.success("Pomyślnie utworzono konto")         
             window.location.replace('/login'); 
         } catch (error) {
             setError('Nie udało się zarejestrować');
+            toast.error("Nie udało się zarejestrować")
         }
     };
 

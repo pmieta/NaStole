@@ -4,6 +4,7 @@ import api from '../api';
 import "../styles/Form.css"
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
+import {  toast } from 'react-toastify';
 
 
 const LoginForm = ({ toggleForm }) => {
@@ -23,9 +24,11 @@ const LoginForm = ({ toggleForm }) => {
         e.preventDefault();
         try {
             const response = await api.post('/api/token/', formData);
+            toast.success("Zalogowano pomyślnie")
             handleLogin(response.data.access, response.data.refresh);
             navigate('/'); 
         } catch (error) {
+            toast.error("Błąd logowania")
             setError('Nie udało się zalogować');
         }
     };

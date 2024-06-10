@@ -52,7 +52,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'customer', 'order_date', 'total_amount', 'address', 'postal_code', 'city',  'items']
+        fields = ['id', 'customer', 'order_date', 'total_amount', 'address', 'postal_code', 'city', 'items']
         read_only_fields = ['order_date', 'total_amount', 'customer']
 
     def create(self, validated_data):
@@ -65,12 +65,33 @@ class OrderSerializer(serializers.ModelSerializer):
         order = Order.objects.create(customer=customer, **validated_data)
         total_amount = 0
 
+        # List to hold order items for bulk create
+        order_items = []
+
+        # Check product availability and prepare order items
         for item_data in items_data:
-            item_data['order'] = order
             product = item_data['product']
-            item_data['price'] = product.price
-            total_amount += item_data['quantity'] * product.price
-            OrderItem.objects.create(**item_data)
+            quantity = item_data['quantity']
+
+            # Check stock quantity
+            if product.stock_quantity < quantity:
+                raise serializers.ValidationError(f"Niewystarczająca ilość produktu w magazynie {product.title}")
+
+            # Update product stock
+            product.stock_quantity -= quantity
+            product.save()
+
+            order_items.append(OrderItem(
+                order=order,
+                product=product,
+                quantity=quantity,
+                price=product.price
+            ))
+
+            total_amount += quantity * product.price
+
+        # Bulk create order items
+        OrderItem.objects.bulk_create(order_items)
 
         order.total_amount = total_amount
         order.save()

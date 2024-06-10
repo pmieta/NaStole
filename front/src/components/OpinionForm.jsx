@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import "../styles/Form.css"
+import {  toast } from 'react-toastify';
 
 const OpinionForm = ({ productId }) => {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ const OpinionForm = ({ productId }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -27,12 +29,14 @@ const OpinionForm = ({ productId }) => {
             }
             );
             console.log('Review created:', response.data);
+            toast.success("Pomyślnie dodano opinię")
             setSuccess('Review submitted successfully!');
             navigate('/review-success');
             setError(null);
         } catch (error) {
             console.log(error)
             setError('Failed to submit review. Please try again.');
+            toast.error("Błąd podczas dodawania opini")
             setSuccess(null);
         }
     };
