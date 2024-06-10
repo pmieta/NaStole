@@ -35,7 +35,7 @@ const CustomNavbar = ({ categories }) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light ">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           <img src="../logo.jpg" alt="Logo" width="50" height="40" className="d-inline-block align-text-top"></img>

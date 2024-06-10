@@ -41,7 +41,7 @@ const AddressForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
-        <label htmlFor="address" className="form-label">Address</label>
+        <label htmlFor="address" className="form-label">Adres</label>
         <input
           type="text"
           className="form-control"
@@ -52,7 +52,7 @@ const AddressForm = () => {
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="postalCode" className="form-label">Postal Code</label>
+        <label htmlFor="postalCode" className="form-label">Kod pocztowy</label>
         <input
           type="text"
           className="form-control"
@@ -65,7 +65,7 @@ const AddressForm = () => {
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="city" className="form-label">City</label>
+        <label htmlFor="city" className="form-label">Miejscowość</label>
         <input
           type="text"
           className="form-control"
@@ -75,7 +75,7 @@ const AddressForm = () => {
           required
         />
       </div>
-      <button type="submit" className="btn btn-primary">Submit Order</button>
+      <button type="submit" className="btn btn-primary">Złóż zamówienie</button>
     </form>
   );
 };

@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import api from '../api';
 import '../styles/ProductDetail.css';
+import ReviewItem from '../components/ReviewItem';
 
 const ProductDetail = () => {
     const { productId } = useParams();
@@ -11,6 +12,7 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -24,8 +26,20 @@ const ProductDetail = () => {
                 setLoading(false);
             }
         };
+        const fetchReviews = async () => {
+            try {
+                const response = await api.get(`api/products/${productId}/reviews/`);
+                setReviews(response.data);
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
 
         fetchProduct();
+        fetchReviews();
     }, [productId]);
 
     const handleAddToCart = () => {
@@ -62,6 +76,14 @@ const ProductDetail = () => {
                     <div className="row">
                         <p><strong>Opis:</strong></p>
                         <p>{product.description}</p>
+                    </div>
+                    <div className="row">
+                        <p><strong>Opinie:</strong></p>
+                        {reviews.map(review => (
+                            <div className='container' ><ReviewItem review={review} key={review.id}></ReviewItem></div>
+
+
+                        ))}
                     </div>
                 </>
             )}

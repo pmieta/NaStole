@@ -37,36 +37,37 @@ const Footer = () => {
     };
 
     return (
-        <footer className="footer mt-auto py-3 bg-light">
+        <footer className="footer mt-auto py-3">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-3">
-                        <h5>Shop Address</h5>
+                        <h5>Adres sklepu</h5>
                         <address>
-                            123 Board Game St.<br />
-                            Game City, GC 12345<br />
-                            Country
+                            Plac Grunwaldzki 44<br />
+                            Wrocław, 50-320<br />
+                            Polska
                         </address>
                     </div>
                     <div className="col-md-3">
-                        <h5>Contact Info</h5>
+                        <h5>Dane kontaktowe</h5>
                         <p>
-                            Email: <a href="mailto:info@boardgamestore.com">info@boardgamestore.com</a><br />
-                            Phone: +123 456 7890
+                            Email: <a >info@nastole.com</a><br />
+                            Phone: 123 456 789
                         </p>
-                        <h5>Information</h5>
+                        <h5>Informacje</h5>
                         <ul className="list-unstyled">
-                            <li><a href="/about">About Us</a></li>
-                            <li><a href="/terms">Terms of Service</a></li>
-                            <li><a href="/privacy">Privacy Policy</a></li>
-                            <li><a href="/help">Help</a></li>
+                            <li><a href="/about">O nas</a></li>
+                            <li><a href="/terms">Regulamin</a></li>
+                            <li><a href="/privacy">Polityka prywatności</a></li>
+                            <li><a href="/help">Pomoc</a></li>
                         </ul>
                     </div>
                     <div className="col-md-6">
-                        <h5>Contact Us</h5>
+                        <h5>Skontaktuj się z nami</h5>
+                        {submitted && <div className="alert alert-success mt-3">Dziękujemy za kontakt!</div>}
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="first_name">First Name</label>
+                                <label htmlFor="first_name">Imię</label>
                                 <input
                                     type="text"
                                     className="form-control form-control-lg"
@@ -74,12 +75,12 @@ const Footer = () => {
                                     name="first_name"
                                     value={formData.first_name}
                                     onChange={handleChange}
-                                    placeholder="First name"
+                                    placeholder="Imię"
                                     required
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="last_name">Last Name</label>
+                                <label htmlFor="last_name">Nazwisko</label>
                                 <input
                                     type="text"
                                     className="form-control form-control-lg"
@@ -87,7 +88,7 @@ const Footer = () => {
                                     name="last_name"
                                     value={formData.last_name}
                                     onChange={handleChange}
-                                    placeholder="Last name"
+                                    placeholder="Nazwisko"
                                     required
                                 />
                             </div>
@@ -100,12 +101,12 @@ const Footer = () => {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    placeholder="Your email"
+                                    placeholder="Email"
                                     required
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="content">Message</label>
+                                <label htmlFor="content">Twoja wiadomość</label>
                                 <textarea
                                     className="form-control form-control-lg"
                                     id="content"
@@ -113,13 +114,13 @@ const Footer = () => {
                                     value={formData.content}
                                     onChange={handleChange}
                                     rows="4"
-                                    placeholder="Your message"
+                                    placeholder=""
                                     required
                                 ></textarea>
                             </div>
-                            <button type="submit" className="btn btn-primary btn-lg">Send</button>
+                            <button type="submit" className="btn btn-primary btn-lg">Wyślij</button>
                         </form>
-                        {submitted && <div className="alert alert-success mt-3">Thank you for your message!</div>}
+                        
                     </div>
                 </div>
             </div>

@@ -64,7 +64,8 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/orders/:orderId" element={<OrderDetail />} />
           <Route path="/user" element={<UserPage />} />
-          <Route path="/products/:id/review" element={<OpinionPage />} />          
+          <Route path="/products/:id/review" element={<OpinionPage />} />     
+          <Route path="/review-success" element={<ReviewSuccess />} />       
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

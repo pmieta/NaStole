@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics, status
 from .serializers import UserSerializer, CategorySerializer, PublisherSerializer, ProductSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from .serializers import ContactFormSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from .models import Category, Publisher, Product, Order, OrderItem, Review, ContactForm
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
@@ -65,11 +65,20 @@ class OrderViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+class ProductReviewListView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        product_id = self.kwargs['product_id']
+        return Review.objects.filter(product_id=product_id).select_related('user')
+
+        
 class ContactFormViewSet(viewsets.ModelViewSet):
     queryset = ContactForm.objects.all()
     serializer_class = ContactFormSerializer
